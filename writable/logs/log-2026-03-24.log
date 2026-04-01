@@ -1,0 +1,588 @@
+ERROR - 2026-03-24 16:05:07 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 C:\xampp\htdocs\alumni_influencer\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#3 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#6 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#8 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#9 C:\xampp\htdocs\alumni_influencer\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#10 {main}
+CRITICAL - 2026-03-24 16:05:07 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Access denied for user ''@'localhost' (using password: NO)
+[Method: GET, Route: featured]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('
+            SELECT p.*, u.email
+            FROM featured_alumni f
+            JOIN users u ON f.user_id = u.id
+            JOIN profiles p ON p.user_id = u.id
+            WHERE f.date = CURDATE()
+        ')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\alumni_influencer\\public\\index.php')
+ERROR - 2026-03-24 16:05:17 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 C:\xampp\htdocs\alumni_influencer\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#3 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#6 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#8 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#9 C:\xampp\htdocs\alumni_influencer\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#10 {main}
+CRITICAL - 2026-03-24 16:05:17 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Access denied for user ''@'localhost' (using password: NO)
+[Method: GET, Route: featured]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('
+            SELECT p.*, u.email
+            FROM featured_alumni f
+            JOIN users u ON f.user_id = u.id
+            JOIN profiles p ON p.user_id = u.id
+            WHERE f.date = CURDATE()
+        ')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\alumni_influencer\\public\\index.php')
+ERROR - 2026-03-24 16:07:01 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 C:\xampp\htdocs\alumni_influencer\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#3 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#6 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#8 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#9 C:\xampp\htdocs\alumni_influencer\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#10 {main}
+CRITICAL - 2026-03-24 16:07:01 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Access denied for user ''@'localhost' (using password: NO)
+[Method: GET, Route: featured]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('
+            SELECT p.*, u.email
+            FROM featured_alumni f
+            JOIN users u ON f.user_id = u.id
+            JOIN profiles p ON p.user_id = u.id
+            WHERE f.date = CURDATE()
+        ')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\alumni_influencer\\public\\index.php')
+ERROR - 2026-03-24 16:12:38 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 C:\xampp\htdocs\alumni_influencer\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#3 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#6 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#8 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#9 C:\xampp\htdocs\alumni_influencer\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#10 {main}
+CRITICAL - 2026-03-24 16:12:38 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Access denied for user ''@'localhost' (using password: NO)
+[Method: GET, Route: featured]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('
+            SELECT p.*, u.email
+            FROM featured_alumni f
+            JOIN users u ON f.user_id = u.id
+            JOIN profiles p ON p.user_id = u.id
+            WHERE f.date = CURDATE()
+        ')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\alumni_influencer\\public\\index.php')
+ERROR - 2026-03-24 16:31:42 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 C:\xampp\htdocs\alumni_influencer\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#3 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#6 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#8 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#9 C:\xampp\htdocs\alumni_influencer\system\rewrite.php(44): require_once('C:\\xampp\\htdocs...')
+#10 {main}
+CRITICAL - 2026-03-24 16:31:42 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Access denied for user ''@'localhost' (using password: NO)
+[Method: GET, Route: featured]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Controllers\ApiController.php(13): CodeIgniter\Database\BaseConnection->query('
+            SELECT p.*, u.email
+            FROM featured_alumni f
+            JOIN users u ON f.user_id = u.id
+            JOIN profiles p ON p.user_id = u.id
+            WHERE f.date = CURDATE()
+        ')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ 9 SYSTEMPATH\rewrite.php(44): require_once('C:\\xampp\\htdocs\\alumni_influencer\\public\\index.php')
+ERROR - 2026-03-24 16:47:39 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(11): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(11): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#3 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#6 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#8 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#9 {main}
+CRITICAL - 2026-03-24 16:47:39 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Access denied for user ''@'localhost' (using password: NO)
+[Method: GET, Route: featured]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Controllers\ApiController.php(11): CodeIgniter\Database\BaseConnection->query('
+            SELECT p.*, u.email
+            FROM featured_alumni f
+            JOIN users u ON f.user_id = u.id
+            JOIN profiles p ON p.user_id = u.id
+            WHERE f.date = CURDATE()
+        ')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-24 16:48:21 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(11): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(11): CodeIgniter\Database\BaseConnection->query('\r\n            S...')
+#3 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#6 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#8 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#9 {main}
+CRITICAL - 2026-03-24 16:48:21 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Access denied for user ''@'localhost' (using password: NO)
+[Method: GET, Route: featured]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 APPPATH\Controllers\ApiController.php(11): CodeIgniter\Database\BaseConnection->query('
+            SELECT p.*, u.email
+            FROM featured_alumni f
+            JOIN users u ON f.user_id = u.id
+            JOIN profiles p ON p.user_id = u.id
+            WHERE f.date = CURDATE()
+        ')
+ 3 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+ 4 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+ 5 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-24 16:51:41 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `f`.`dat...', Array, false)
+#4 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(17): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#7 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `f`.`dat...', Array, false)
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(17): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+CRITICAL - 2026-03-24 16:51:41 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Access denied for user ''@'localhost' (using password: NO)
+[Method: GET, Route: featured]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `f`.`date`, `u`.`id` as `user_id`, `u`.`email`, `p`.`name`, `p`.`bio`, `p`.`linkedin_url`, `p`.`profile_image`
+FROM `featured_alumni` `f`
+JOIN `users` `u` ON `u`.`id` = `f`.`user_id`
+JOIN `profiles` `p` ON `p`.`user_id` = `u`.`id`
+WHERE `f`.`date` = :f.date:', [...], false)
+ 3 APPPATH\Controllers\ApiController.php(17): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-24 16:55:49 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `f`.`dat...', Array, false)
+#4 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(17): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#7 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `f`.`dat...', Array, false)
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(17): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+CRITICAL - 2026-03-24 16:55:49 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Access denied for user ''@'localhost' (using password: NO)
+[Method: GET, Route: featured]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `f`.`date`, `u`.`id` as `user_id`, `u`.`email`, `p`.`name`, `p`.`bio`, `p`.`linkedin_url`, `p`.`profile_image`
+FROM `featured_alumni` `f`
+JOIN `users` `u` ON `u`.`id` = `f`.`user_id`
+JOIN `profiles` `p` ON `p`.`user_id` = `u`.`id`
+WHERE `f`.`date` = :f.date:', [...], false)
+ 3 APPPATH\Controllers\ApiController.php(17): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-24 16:57:04 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `f`.`dat...', Array, false)
+#4 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(17): CodeIgniter\Database\BaseBuilder->get()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#7 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#9 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#10 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#11 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `f`.`dat...', Array, false)
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(17): CodeIgniter\Database\BaseBuilder->get()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+CRITICAL - 2026-03-24 16:57:04 --> CodeIgniter\Database\Exceptions\DatabaseException: Unable to connect to the database.
+Main connection [MySQLi]: Access denied for user ''@'localhost' (using password: NO)
+[Method: GET, Route: featured]
+in SYSTEMPATH\Database\BaseConnection.php on line 465.
+ 1 SYSTEMPATH\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+ 2 SYSTEMPATH\Database\BaseBuilder.php(1649): CodeIgniter\Database\BaseConnection->query('SELECT `f`.`date`, `u`.`id` as `user_id`, `u`.`email`, `p`.`name`, `p`.`bio`, `p`.`linkedin_url`, `p`.`profile_image`
+FROM `featured_alumni` `f`
+JOIN `users` `u` ON `u`.`id` = `f`.`user_id`
+JOIN `profiles` `p` ON `p`.`user_id` = `u`.`id`
+WHERE `f`.`date` = :f.date:', [...], false)
+ 3 APPPATH\Controllers\ApiController.php(17): CodeIgniter\Database\BaseBuilder->get()
+ 4 SYSTEMPATH\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+ 5 SYSTEMPATH\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+ 6 SYSTEMPATH\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2026-03-24 16:58:57 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(27): CodeIgniter\Database\BaseConnection->query('\r\n             ...')
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(27): CodeIgniter\Database\BaseConnection->query('\r\n             ...')
+#3 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#6 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#8 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#9 {main}
+ERROR - 2026-03-24 16:59:14 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(27): CodeIgniter\Database\BaseConnection->query('\r\n             ...')
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(27): CodeIgniter\Database\BaseConnection->query('\r\n             ...')
+#3 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#6 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#8 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#9 {main}
+ERROR - 2026-03-24 16:59:53 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(27): CodeIgniter\Database\BaseConnection->query('\r\n             ...')
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(27): CodeIgniter\Database\BaseConnection->query('\r\n             ...')
+#3 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#6 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#8 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#9 {main}
+ERROR - 2026-03-24 17:01:33 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(27): CodeIgniter\Database\BaseConnection->query('\r\n             ...')
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(27): CodeIgniter\Database\BaseConnection->query('\r\n             ...')
+#3 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#6 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#8 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#9 {main}
+ERROR - 2026-03-24 17:03:16 --> Error connecting to the database: mysqli_sql_exception: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:201
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php(201): mysqli->real_connect('localhost', '', Object(SensitiveParameterValue), 'alumni', 3306, '', 0)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#2 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#3 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(27): CodeIgniter\Database\BaseConnection->query('\r\n             ...')
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#6 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#8 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#9 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#10 {main}
+
+Next CodeIgniter\Database\Exceptions\DatabaseException: Access denied for user ''@'localhost' (using password: NO) in C:\xampp\htdocs\alumni_influencer\system\Database\MySQLi\Connection.php:231
+Stack trace:
+#0 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(419): CodeIgniter\Database\MySQLi\Connection->connect(false)
+#1 C:\xampp\htdocs\alumni_influencer\system\Database\BaseConnection.php(654): CodeIgniter\Database\BaseConnection->initialize()
+#2 C:\xampp\htdocs\alumni_influencer\app\Controllers\ApiController.php(27): CodeIgniter\Database\BaseConnection->query('\r\n             ...')
+#3 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(951): App\Controllers\ApiController->featured()
+#4 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(497): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\ApiController))
+#5 C:\xampp\htdocs\alumni_influencer\system\CodeIgniter.php(340): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#6 C:\xampp\htdocs\alumni_influencer\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#7 C:\xampp\htdocs\alumni_influencer\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#8 C:\xampp\htdocs\alumni_influencer\public\index.php(59): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#9 {main}
