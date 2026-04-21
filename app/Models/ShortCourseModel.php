@@ -14,6 +14,8 @@ class ShortCourseModel extends Model
         'course_name',
         'provider_name',
         'course_url',
+        'start_date',
+        'end_date',
         'completion_date',
     ];
 }

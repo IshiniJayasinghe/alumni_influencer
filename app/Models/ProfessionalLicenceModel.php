@@ -14,6 +14,8 @@ class ProfessionalLicenceModel extends Model
         'licence_name',
         'awarding_body',
         'official_url',
+        'start_date',
+        'end_date',
         'completion_date',
         'sponsor_offer',
         'is_sponsored',

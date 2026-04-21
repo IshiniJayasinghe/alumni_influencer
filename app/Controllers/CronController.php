@@ -15,7 +15,7 @@ class CronController extends BaseController
      * shared CRON_SECRET stored in .env. Call it from your server's cron tab:
      *
      *   0 18 * * * curl -s -H "X-Cron-Secret: YOUR_SECRET" \
-     *       http://localhost/alumni_influencer_fixed/public/cron/pick-winner
+     *       http://localhost/alumni_influencer/public/cron/pick-winner
      *
      * The spec requires automated selection each day at 6 PM.
      */

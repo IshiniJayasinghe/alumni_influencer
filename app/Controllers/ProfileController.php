@@ -6,6 +6,52 @@ use Config\Database;
 
 class ProfileController extends BaseController
 {
+    private function normalizeDate(?string $value): ?string
+    {
+        $value = trim((string) $value);
+
+        return $value !== '' ? $value : null;
+    }
+
+    private function validateDateRange(?string $startDate, ?string $endDate, string $label)
+    {
+        if ($startDate !== null && $endDate !== null && strtotime($startDate) > strtotime($endDate)) {
+            return redirect()->to('/profile/manage')->with('error', $label . ' start date cannot be later than end date.');
+        }
+
+        return null;
+    }
+
+    private function syncUserGraduationYear($db, int $userId): void
+    {
+        if (
+            !$db->tableExists('users')
+            || !$db->tableExists('degrees')
+            || !in_array('graduation_year', $db->getFieldNames('users'), true)
+            || !in_array('completion_date', $db->getFieldNames('degrees'), true)
+        ) {
+            return;
+        }
+
+        $latestCompletionDate = $db->table('degrees')
+            ->select('completion_date')
+            ->where('user_id', $userId)
+            ->where('completion_date IS NOT NULL', null, false)
+            ->orderBy('completion_date', 'DESC')
+            ->get()
+            ->getRowArray();
+
+        $graduationYear = null;
+        if (!empty($latestCompletionDate['completion_date'])) {
+            $graduationYear = (int) date('Y', strtotime($latestCompletionDate['completion_date']));
+        }
+
+        $db->table('users')->where('id', $userId)->update([
+            'graduation_year' => $graduationYear,
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+    }
+
     public function index()
     {
         $db     = Database::connect();
@@ -146,6 +192,8 @@ class ProfileController extends BaseController
         $certificationName = trim((string) $this->request->getPost('certification_name'));
         $organisationName  = trim((string) $this->request->getPost('organisation_name'));
         $courseUrl         = trim((string) $this->request->getPost('course_url'));
+        $startDate         = $this->normalizeDate($this->request->getPost('start_date'));
+        $endDate           = $this->normalizeDate($this->request->getPost('end_date'));
         $completionDate    = trim((string) $this->request->getPost('completion_date'));
 
         if ($certificationName === '') {
@@ -156,11 +204,17 @@ class ProfileController extends BaseController
             return redirect()->to('/profile/manage')->with('error', 'Course URL is not a valid URL.');
         }
 
+        if ($redirect = $this->validateDateRange($startDate, $endDate, 'Certification')) {
+            return $redirect;
+        }
+
         $db->table('certifications')->insert([
             'user_id'            => $userId,
             'certification_name' => $certificationName,
             'organisation_name'  => $organisationName,
             'course_url'         => $courseUrl !== '' ? $courseUrl : null,
+            'start_date'         => $startDate,
+            'end_date'           => $endDate,
             'completion_date'    => $completionDate !== '' ? $completionDate : null,
         ]);
 
@@ -180,6 +234,8 @@ class ProfileController extends BaseController
         $certificationName = trim((string) $this->request->getPost('certification_name'));
         $organisationName  = trim((string) $this->request->getPost('organisation_name'));
         $courseUrl         = trim((string) $this->request->getPost('course_url'));
+        $startDate         = $this->normalizeDate($this->request->getPost('start_date'));
+        $endDate           = $this->normalizeDate($this->request->getPost('end_date'));
         $completionDate    = trim((string) $this->request->getPost('completion_date'));
 
         if ($certificationName === '') {
@@ -190,10 +246,16 @@ class ProfileController extends BaseController
             return redirect()->to('/profile/manage')->with('error', 'Course URL is not a valid URL.');
         }
 
+        if ($redirect = $this->validateDateRange($startDate, $endDate, 'Certification')) {
+            return $redirect;
+        }
+
         $db->table('certifications')->where('id', (int) $id)->where('user_id', $userId)->update([
             'certification_name' => $certificationName,
             'organisation_name'  => $organisationName,
             'course_url'         => $courseUrl !== '' ? $courseUrl : null,
+            'start_date'         => $startDate,
+            'end_date'           => $endDate,
             'completion_date'    => $completionDate !== '' ? $completionDate : null,
         ]);
 
@@ -222,6 +284,8 @@ class ProfileController extends BaseController
         $licenceName   = trim((string) $this->request->getPost('licence_name'));
         $awardingBody  = trim((string) $this->request->getPost('awarding_body'));
         $officialUrl   = trim((string) $this->request->getPost('official_url'));
+        $startDate     = $this->normalizeDate($this->request->getPost('start_date'));
+        $endDate       = $this->normalizeDate($this->request->getPost('end_date'));
         $completionDate = trim((string) $this->request->getPost('completion_date'));
 
         if ($licenceName === '') {
@@ -232,11 +296,17 @@ class ProfileController extends BaseController
             return redirect()->to('/profile/manage')->with('error', 'Official URL is not a valid URL.');
         }
 
+        if ($redirect = $this->validateDateRange($startDate, $endDate, 'Licence')) {
+            return $redirect;
+        }
+
         $db->table('professional_licences')->insert([
             'user_id'         => $userId,
             'licence_name'    => $licenceName,
             'awarding_body'   => $awardingBody,
             'official_url'    => $officialUrl !== '' ? $officialUrl : null,
+            'start_date'      => $startDate,
+            'end_date'        => $endDate,
             'completion_date' => $completionDate !== '' ? $completionDate : null,
         ]);
 
@@ -256,6 +326,8 @@ class ProfileController extends BaseController
         $licenceName    = trim((string) $this->request->getPost('licence_name'));
         $awardingBody   = trim((string) $this->request->getPost('awarding_body'));
         $officialUrl    = trim((string) $this->request->getPost('official_url'));
+        $startDate      = $this->normalizeDate($this->request->getPost('start_date'));
+        $endDate        = $this->normalizeDate($this->request->getPost('end_date'));
         $completionDate = trim((string) $this->request->getPost('completion_date'));
 
         if ($licenceName === '') {
@@ -266,10 +338,16 @@ class ProfileController extends BaseController
             return redirect()->to('/profile/manage')->with('error', 'Official URL is not a valid URL.');
         }
 
+        if ($redirect = $this->validateDateRange($startDate, $endDate, 'Licence')) {
+            return $redirect;
+        }
+
         $db->table('professional_licences')->where('id', (int) $id)->where('user_id', $userId)->update([
             'licence_name'    => $licenceName,
             'awarding_body'   => $awardingBody,
             'official_url'    => $officialUrl !== '' ? $officialUrl : null,
+            'start_date'      => $startDate,
+            'end_date'        => $endDate,
             'completion_date' => $completionDate !== '' ? $completionDate : null,
         ]);
 
@@ -298,6 +376,8 @@ class ProfileController extends BaseController
         $degreeName      = trim((string) $this->request->getPost('degree_name'));
         $institutionName = trim((string) $this->request->getPost('institution_name'));
         $officialUrl     = trim((string) $this->request->getPost('official_url'));
+        $startDate       = $this->normalizeDate($this->request->getPost('start_date'));
+        $endDate         = $this->normalizeDate($this->request->getPost('end_date'));
         $completionDate  = trim((string) $this->request->getPost('completion_date'));
 
         if ($degreeName === '') {
@@ -308,13 +388,21 @@ class ProfileController extends BaseController
             return redirect()->to('/profile/manage')->with('error', 'Official URL is not a valid URL.');
         }
 
+        if ($redirect = $this->validateDateRange($startDate, $endDate, 'Degree')) {
+            return $redirect;
+        }
+
         $db->table('degrees')->insert([
             'user_id'          => $userId,
             'degree_name'      => $degreeName,
             'institution_name' => $institutionName,
             'official_url'     => $officialUrl !== '' ? $officialUrl : null,
+            'start_date'       => $startDate,
+            'end_date'         => $endDate,
             'completion_date'  => $completionDate !== '' ? $completionDate : null,
         ]);
+
+        $this->syncUserGraduationYear($db, $userId);
 
         return redirect()->to('/profile/manage')->with('success', 'Degree added.');
     }
@@ -332,6 +420,8 @@ class ProfileController extends BaseController
         $degreeName      = trim((string) $this->request->getPost('degree_name'));
         $institutionName = trim((string) $this->request->getPost('institution_name'));
         $officialUrl     = trim((string) $this->request->getPost('official_url'));
+        $startDate       = $this->normalizeDate($this->request->getPost('start_date'));
+        $endDate         = $this->normalizeDate($this->request->getPost('end_date'));
         $completionDate  = trim((string) $this->request->getPost('completion_date'));
 
         if ($degreeName === '') {
@@ -342,12 +432,20 @@ class ProfileController extends BaseController
             return redirect()->to('/profile/manage')->with('error', 'Official URL is not a valid URL.');
         }
 
+        if ($redirect = $this->validateDateRange($startDate, $endDate, 'Degree')) {
+            return $redirect;
+        }
+
         $db->table('degrees')->where('id', (int) $id)->where('user_id', $userId)->update([
             'degree_name'      => $degreeName,
             'institution_name' => $institutionName,
             'official_url'     => $officialUrl !== '' ? $officialUrl : null,
+            'start_date'       => $startDate,
+            'end_date'         => $endDate,
             'completion_date'  => $completionDate !== '' ? $completionDate : null,
         ]);
+
+        $this->syncUserGraduationYear($db, $userId);
 
         return redirect()->to('/profile/manage')->with('success', 'Degree updated.');
     }
@@ -358,6 +456,7 @@ class ProfileController extends BaseController
         $userId = session()->get('user_id');
 
         $db->table('degrees')->where('id', (int) $id)->where('user_id', $userId)->delete();
+        $this->syncUserGraduationYear($db, (int) $userId);
 
         return redirect()->to('/profile/manage')->with('success', 'Degree deleted.');
     }
@@ -374,6 +473,8 @@ class ProfileController extends BaseController
         $courseName     = trim((string) $this->request->getPost('course_name'));
         $providerName   = trim((string) $this->request->getPost('provider_name'));
         $courseUrl      = trim((string) $this->request->getPost('course_url'));
+        $startDate      = $this->normalizeDate($this->request->getPost('start_date'));
+        $endDate        = $this->normalizeDate($this->request->getPost('end_date'));
         $completionDate = trim((string) $this->request->getPost('completion_date'));
 
         if ($courseName === '') {
@@ -384,11 +485,17 @@ class ProfileController extends BaseController
             return redirect()->to('/profile/manage')->with('error', 'Course URL is not a valid URL.');
         }
 
+        if ($redirect = $this->validateDateRange($startDate, $endDate, 'Course')) {
+            return $redirect;
+        }
+
         $db->table('short_courses')->insert([
             'user_id'         => $userId,
             'course_name'     => $courseName,
             'provider_name'   => $providerName,
             'course_url'      => $courseUrl !== '' ? $courseUrl : null,
+            'start_date'      => $startDate,
+            'end_date'        => $endDate,
             'completion_date' => $completionDate !== '' ? $completionDate : null,
         ]);
 
@@ -408,6 +515,8 @@ class ProfileController extends BaseController
         $courseName     = trim((string) $this->request->getPost('course_name'));
         $providerName   = trim((string) $this->request->getPost('provider_name'));
         $courseUrl      = trim((string) $this->request->getPost('course_url'));
+        $startDate      = $this->normalizeDate($this->request->getPost('start_date'));
+        $endDate        = $this->normalizeDate($this->request->getPost('end_date'));
         $completionDate = trim((string) $this->request->getPost('completion_date'));
 
         if ($courseName === '') {
@@ -418,10 +527,16 @@ class ProfileController extends BaseController
             return redirect()->to('/profile/manage')->with('error', 'Course URL is not a valid URL.');
         }
 
+        if ($redirect = $this->validateDateRange($startDate, $endDate, 'Course')) {
+            return $redirect;
+        }
+
         $db->table('short_courses')->where('id', (int) $id)->where('user_id', $userId)->update([
             'course_name'     => $courseName,
             'provider_name'   => $providerName,
             'course_url'      => $courseUrl !== '' ? $courseUrl : null,
+            'start_date'      => $startDate,
+            'end_date'        => $endDate,
             'completion_date' => $completionDate !== '' ? $completionDate : null,
         ]);
 
@@ -449,6 +564,8 @@ class ProfileController extends BaseController
 
         $companyName  = trim((string) $this->request->getPost('company_name'));
         $jobTitle     = trim((string) $this->request->getPost('job_title'));
+        $programme    = trim((string) $this->request->getPost('programme'));
+        $industrySector = trim((string) $this->request->getPost('industry_sector'));
         $startDate    = trim((string) $this->request->getPost('start_date'));
         $endDate      = trim((string) $this->request->getPost('end_date'));
         $description  = trim((string) $this->request->getPost('description'));
@@ -462,11 +579,19 @@ class ProfileController extends BaseController
             'user_id'      => $userId,
             'company_name' => $companyName,
             'job_title'    => $jobTitle,
+            'industry_sector' => $industrySector !== '' ? $industrySector : null,
             'start_date'   => $startDate !== '' ? $startDate : null,
             'end_date'     => $isCurrent ? null : ($endDate !== '' ? $endDate : null),
             'is_current'   => $isCurrent,
             'description'  => $description !== '' ? $description : null,
         ]);
+
+        if ($db->tableExists('users') && in_array('programme', $db->getFieldNames('users'), true)) {
+            $db->table('users')->where('id', $userId)->update([
+                'programme' => $programme !== '' ? $programme : null,
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+        }
 
         return redirect()->to('/profile/manage')->with('success', 'Employment added.');
     }
@@ -483,6 +608,8 @@ class ProfileController extends BaseController
 
         $companyName = trim((string) $this->request->getPost('company_name'));
         $jobTitle    = trim((string) $this->request->getPost('job_title'));
+        $programme   = trim((string) $this->request->getPost('programme'));
+        $industrySector = trim((string) $this->request->getPost('industry_sector'));
         $startDate   = trim((string) $this->request->getPost('start_date'));
         $endDate     = trim((string) $this->request->getPost('end_date'));
         $description = trim((string) $this->request->getPost('description'));
@@ -495,11 +622,19 @@ class ProfileController extends BaseController
         $db->table('employment_history')->where('id', (int) $id)->where('user_id', $userId)->update([
             'company_name' => $companyName,
             'job_title'    => $jobTitle,
+            'industry_sector' => $industrySector !== '' ? $industrySector : null,
             'start_date'   => $startDate !== '' ? $startDate : null,
             'end_date'     => $isCurrent ? null : ($endDate !== '' ? $endDate : null),
             'is_current'   => $isCurrent,
             'description'  => $description !== '' ? $description : null,
         ]);
+
+        if ($db->tableExists('users') && in_array('programme', $db->getFieldNames('users'), true)) {
+            $db->table('users')->where('id', $userId)->update([
+                'programme' => $programme !== '' ? $programme : null,
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+        }
 
         return redirect()->to('/profile/manage')->with('success', 'Employment updated.');
     }

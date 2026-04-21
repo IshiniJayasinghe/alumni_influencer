@@ -8,6 +8,10 @@
     <h2 style="margin-top:18px;">Featured alumnus endpoint</h2>
     <pre style="margin-top:10px; white-space:pre-wrap; background:#111827; padding:14px; border-radius:10px;">GET <?= esc(base_url('api/featured')) ?>
 Authorization: Bearer YOUR_KEY</pre>
+    <h2 style="margin-top:18px;">Alumni directory endpoint</h2>
+    <p style="margin-top:10px;">Use a key with the <code>read:alumni</code> scope to search alumni records.</p>
+    <pre style="margin-top:10px; white-space:pre-wrap; background:#111827; padding:14px; border-radius:10px;">GET <?= esc(base_url('api/alumni?search=Jane&programme=BSc%20Computer%20Science&graduation_year=2026')) ?>
+Authorization: Bearer YOUR_KEY</pre>
     <h2 style="margin-top:18px;">Example response</h2>
     <pre style="margin-top:10px; white-space:pre-wrap; background:#111827; padding:14px; border-radius:10px;">{
   "status": "success",

@@ -37,14 +37,14 @@ class BidController extends BaseController
                 : 'You are currently losing. Consider increasing your bid.';
         }
 
-        $winsThisMonth        = $this->winsThisMonth($userId);
+        $bidsThisMonth        = $this->bidsThisMonth($userId);
         $allowedWinsThisMonth = $this->allowedWinsThisMonth($userId);
 
         return view('bids/index', [
             'bids'                 => $bidModel->where('user_id', $userId)->orderBy('id', 'DESC')->findAll(),
             'myBidToday'           => $myBidToday,
             'winningStatus'        => $winningStatus,
-            'winsThisMonth'        => $winsThisMonth,
+            'winsThisMonth'        => $bidsThisMonth,
             'allowedWinsThisMonth' => $allowedWinsThisMonth,
         ]);
     }
@@ -62,17 +62,17 @@ class BidController extends BaseController
             return redirect()->back()->with('error', 'Enter a valid bid amount greater than zero.');
         }
 
-        // Enforce monthly win limit before allowing a new bid
-        if ($this->winsThisMonth($userId) >= $this->allowedWinsThisMonth($userId)) {
-            return redirect()->back()->with('error', 'You have reached your monthly featured limit and cannot place further bids this month.');
-        }
-
         $today    = date('Y-m-d');
         $bidModel = new BidModel();
         $existing = $bidModel
             ->where('user_id', $userId)
             ->where('bid_date', $today)
             ->first();
+
+        // Enforce monthly bid limit only when placing a new bid for a new day
+        if (!$existing && $this->bidsThisMonth($userId) >= $this->allowedWinsThisMonth($userId)) {
+            return redirect()->back()->with('error', 'You have reached your monthly bidding limit and cannot place further bids this month.');
+        }
 
         $db   = Database::connect();
         $user = $db->table('users')->where('id', $userId)->get()->getRowArray();
@@ -141,6 +141,18 @@ class BidController extends BaseController
     // -------------------------------------------------------------------------
     // Private helpers
     // -------------------------------------------------------------------------
+
+    /**
+     * Number of bid entries this user has placed in the current calendar month.
+     */
+    private function bidsThisMonth(int $userId): int
+    {
+        return (new BidModel())
+            ->where('user_id', $userId)
+            ->where('bid_date >=', date('Y-m-01'))
+            ->where('bid_date <=', date('Y-m-t'))
+            ->countAllResults();
+    }
 
     /**
      * Number of times this user has been featured as Alumni of the Day this calendar month.

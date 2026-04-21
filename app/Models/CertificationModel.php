@@ -14,6 +14,8 @@ class CertificationModel extends Model
         'certification_name',
         'organisation_name',
         'course_url',
+        'start_date',
+        'end_date',
         'completion_date',
         'sponsor_offer',
         'is_sponsored',

@@ -45,6 +45,7 @@
     <nav>
         <a href="<?= base_url('/') ?>">Home</a>
         <?php if (session()->get('logged_in')): ?>
+            <a href="<?= base_url('dashboard') ?>">Dashboard</a>
             <a href="<?= base_url('profile') ?>">Profile</a>
             <a href="<?= base_url('profile/manage') ?>">Manage</a>
             <a href="<?= base_url('bids') ?>">Bids</a>

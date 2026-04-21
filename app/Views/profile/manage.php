@@ -1,6 +1,46 @@
 <?= $this->include('layout/header') ?>
 
 <?php $user = $user ?? []; ?>
+<?php
+$industrySectors = [
+    'Agriculture',
+    'Architecture and Planning',
+    'Arts and Design',
+    'Automotive',
+    'Aviation',
+    'Banking and Finance',
+    'Biotechnology',
+    'Construction',
+    'Consulting',
+    'Cybersecurity',
+    'Data Science and Analytics',
+    'E-commerce',
+    'Education',
+    'Energy and Utilities',
+    'Engineering',
+    'Entertainment and Media',
+    'Environmental Services',
+    'Fashion and Apparel',
+    'Food and Beverage',
+    'Government and Public Administration',
+    'Healthcare',
+    'Hospitality and Tourism',
+    'Human Resources',
+    'Information Technology (IT)',
+    'Insurance',
+    'Legal Services',
+    'Logistics and Supply Chain',
+    'Manufacturing',
+    'Marketing and Advertising',
+    'Mining and Metals',
+    'Nonprofit and NGO',
+    'Pharmaceuticals',
+    'Real Estate',
+    'Retail',
+    'Telecommunications',
+    'Transportation',
+];
+?>
 
 <style>
     body { margin:0; font-family:Arial,Helvetica,sans-serif; background:linear-gradient(180deg,#0f172a,#1e293b); color:white; }
@@ -93,6 +133,10 @@
                 <div class="field-group"><label>Certification Name *</label><input type="text" name="certification_name" required></div>
                 <div class="field-group"><label>Organisation</label><input type="text" name="organisation_name"></div>
                 <div class="field-group"><label>Course URL</label><input type="url" name="course_url" placeholder="https://..."></div>
+                <div class="grid-2">
+                    <div class="field-group"><label>Start Date</label><input type="date" name="start_date"></div>
+                    <div class="field-group"><label>End Date</label><input type="date" name="end_date"></div>
+                </div>
                 <div class="field-group"><label>Completion Date</label><input type="date" name="completion_date"></div>
                 <button type="submit" class="btn">Add Certification</button>
             </form>
@@ -105,6 +149,7 @@
                                 <strong><?= esc($item['certification_name'] ?? '') ?></strong><br>
                                 <span class="small-text">
                                     <?= esc($item['organisation_name'] ?? '') ?>
+                                    <?php if (!empty($item['start_date']) || !empty($item['end_date'])): ?><br><?= esc($item['start_date'] ?? '') ?> to <?= esc($item['end_date'] ?? '') ?><?php endif; ?>
                                     <?php if (!empty($item['completion_date'])): ?> – <?= esc($item['completion_date']) ?><?php endif; ?>
                                     <?php if (!empty($item['course_url'])): ?> &nbsp;<a href="<?= esc($item['course_url']) ?>" target="_blank" rel="noopener" style="color:#38bdf8;">Link</a><?php endif; ?>
                                 </span>
@@ -120,6 +165,10 @@
                                 <div class="field-group"><label>Name *</label><input type="text" name="certification_name" value="<?= esc($item['certification_name'] ?? '') ?>" required></div>
                                 <div class="field-group"><label>Organisation</label><input type="text" name="organisation_name" value="<?= esc($item['organisation_name'] ?? '') ?>"></div>
                                 <div class="field-group"><label>Course URL</label><input type="url" name="course_url" value="<?= esc($item['course_url'] ?? '') ?>"></div>
+                                <div class="grid-2">
+                                    <div class="field-group"><label>Start Date</label><input type="date" name="start_date" value="<?= esc($item['start_date'] ?? '') ?>"></div>
+                                    <div class="field-group"><label>End Date</label><input type="date" name="end_date" value="<?= esc($item['end_date'] ?? '') ?>"></div>
+                                </div>
                                 <div class="field-group"><label>Completion Date</label><input type="date" name="completion_date" value="<?= esc($item['completion_date'] ?? '') ?>"></div>
                                 <button type="submit" class="btn">Save</button>
                             </form>
@@ -137,6 +186,10 @@
                 <div class="field-group"><label>Licence Name *</label><input type="text" name="licence_name" required></div>
                 <div class="field-group"><label>Awarding Body</label><input type="text" name="awarding_body"></div>
                 <div class="field-group"><label>Official URL</label><input type="url" name="official_url" placeholder="https://..."></div>
+                <div class="grid-2">
+                    <div class="field-group"><label>Start Date</label><input type="date" name="start_date"></div>
+                    <div class="field-group"><label>End Date</label><input type="date" name="end_date"></div>
+                </div>
                 <div class="field-group"><label>Completion Date</label><input type="date" name="completion_date"></div>
                 <button type="submit" class="btn">Add Licence</button>
             </form>
@@ -149,6 +202,7 @@
                                 <strong><?= esc($item['licence_name'] ?? '') ?></strong><br>
                                 <span class="small-text">
                                     <?= esc($item['awarding_body'] ?? '') ?>
+                                    <?php if (!empty($item['start_date']) || !empty($item['end_date'])): ?><br><?= esc($item['start_date'] ?? '') ?> to <?= esc($item['end_date'] ?? '') ?><?php endif; ?>
                                     <?php if (!empty($item['completion_date'])): ?> – <?= esc($item['completion_date']) ?><?php endif; ?>
                                     <?php if (!empty($item['official_url'])): ?> &nbsp;<a href="<?= esc($item['official_url']) ?>" target="_blank" rel="noopener" style="color:#38bdf8;">Link</a><?php endif; ?>
                                 </span>
@@ -164,6 +218,10 @@
                                 <div class="field-group"><label>Name *</label><input type="text" name="licence_name" value="<?= esc($item['licence_name'] ?? '') ?>" required></div>
                                 <div class="field-group"><label>Awarding Body</label><input type="text" name="awarding_body" value="<?= esc($item['awarding_body'] ?? '') ?>"></div>
                                 <div class="field-group"><label>Official URL</label><input type="url" name="official_url" value="<?= esc($item['official_url'] ?? '') ?>"></div>
+                                <div class="grid-2">
+                                    <div class="field-group"><label>Start Date</label><input type="date" name="start_date" value="<?= esc($item['start_date'] ?? '') ?>"></div>
+                                    <div class="field-group"><label>End Date</label><input type="date" name="end_date" value="<?= esc($item['end_date'] ?? '') ?>"></div>
+                                </div>
                                 <div class="field-group"><label>Completion Date</label><input type="date" name="completion_date" value="<?= esc($item['completion_date'] ?? '') ?>"></div>
                                 <button type="submit" class="btn">Save</button>
                             </form>
@@ -181,6 +239,10 @@
                 <div class="field-group"><label>Degree Name *</label><input type="text" name="degree_name" required></div>
                 <div class="field-group"><label>Institution</label><input type="text" name="institution_name"></div>
                 <div class="field-group"><label>Official URL</label><input type="url" name="official_url" placeholder="https://..."></div>
+                <div class="grid-2">
+                    <div class="field-group"><label>Start Date</label><input type="date" name="start_date"></div>
+                    <div class="field-group"><label>End Date</label><input type="date" name="end_date"></div>
+                </div>
                 <div class="field-group"><label>Completion Date</label><input type="date" name="completion_date"></div>
                 <button type="submit" class="btn">Add Degree</button>
             </form>
@@ -193,6 +255,7 @@
                                 <strong><?= esc($item['degree_name'] ?? '') ?></strong><br>
                                 <span class="small-text">
                                     <?= esc($item['institution_name'] ?? '') ?>
+                                    <?php if (!empty($item['start_date']) || !empty($item['end_date'])): ?><br><?= esc($item['start_date'] ?? '') ?> to <?= esc($item['end_date'] ?? '') ?><?php endif; ?>
                                     <?php if (!empty($item['completion_date'])): ?> – <?= esc($item['completion_date']) ?><?php endif; ?>
                                     <?php if (!empty($item['official_url'])): ?> &nbsp;<a href="<?= esc($item['official_url']) ?>" target="_blank" rel="noopener" style="color:#38bdf8;">Link</a><?php endif; ?>
                                 </span>
@@ -208,6 +271,10 @@
                                 <div class="field-group"><label>Name *</label><input type="text" name="degree_name" value="<?= esc($item['degree_name'] ?? '') ?>" required></div>
                                 <div class="field-group"><label>Institution</label><input type="text" name="institution_name" value="<?= esc($item['institution_name'] ?? '') ?>"></div>
                                 <div class="field-group"><label>Official URL</label><input type="url" name="official_url" value="<?= esc($item['official_url'] ?? '') ?>"></div>
+                                <div class="grid-2">
+                                    <div class="field-group"><label>Start Date</label><input type="date" name="start_date" value="<?= esc($item['start_date'] ?? '') ?>"></div>
+                                    <div class="field-group"><label>End Date</label><input type="date" name="end_date" value="<?= esc($item['end_date'] ?? '') ?>"></div>
+                                </div>
                                 <div class="field-group"><label>Completion Date</label><input type="date" name="completion_date" value="<?= esc($item['completion_date'] ?? '') ?>"></div>
                                 <button type="submit" class="btn">Save</button>
                             </form>
@@ -225,6 +292,10 @@
                 <div class="field-group"><label>Course Name *</label><input type="text" name="course_name" required></div>
                 <div class="field-group"><label>Provider</label><input type="text" name="provider_name"></div>
                 <div class="field-group"><label>Course URL</label><input type="url" name="course_url" placeholder="https://..."></div>
+                <div class="grid-2">
+                    <div class="field-group"><label>Start Date</label><input type="date" name="start_date"></div>
+                    <div class="field-group"><label>End Date</label><input type="date" name="end_date"></div>
+                </div>
                 <div class="field-group"><label>Completion Date</label><input type="date" name="completion_date"></div>
                 <button type="submit" class="btn">Add Course</button>
             </form>
@@ -237,6 +308,7 @@
                                 <strong><?= esc($item['course_name'] ?? '') ?></strong><br>
                                 <span class="small-text">
                                     <?= esc($item['provider_name'] ?? '') ?>
+                                    <?php if (!empty($item['start_date']) || !empty($item['end_date'])): ?><br><?= esc($item['start_date'] ?? '') ?> to <?= esc($item['end_date'] ?? '') ?><?php endif; ?>
                                     <?php if (!empty($item['completion_date'])): ?> – <?= esc($item['completion_date']) ?><?php endif; ?>
                                     <?php if (!empty($item['course_url'])): ?> &nbsp;<a href="<?= esc($item['course_url']) ?>" target="_blank" rel="noopener" style="color:#38bdf8;">Link</a><?php endif; ?>
                                 </span>
@@ -252,6 +324,10 @@
                                 <div class="field-group"><label>Name *</label><input type="text" name="course_name" value="<?= esc($item['course_name'] ?? '') ?>" required></div>
                                 <div class="field-group"><label>Provider</label><input type="text" name="provider_name" value="<?= esc($item['provider_name'] ?? '') ?>"></div>
                                 <div class="field-group"><label>Course URL</label><input type="url" name="course_url" value="<?= esc($item['course_url'] ?? '') ?>"></div>
+                                <div class="grid-2">
+                                    <div class="field-group"><label>Start Date</label><input type="date" name="start_date" value="<?= esc($item['start_date'] ?? '') ?>"></div>
+                                    <div class="field-group"><label>End Date</label><input type="date" name="end_date" value="<?= esc($item['end_date'] ?? '') ?>"></div>
+                                </div>
                                 <div class="field-group"><label>Completion Date</label><input type="date" name="completion_date" value="<?= esc($item['completion_date'] ?? '') ?>"></div>
                                 <button type="submit" class="btn">Save</button>
                             </form>
@@ -269,6 +345,16 @@
                 <div class="grid-2">
                     <div class="field-group"><label>Company Name *</label><input type="text" name="company_name" required></div>
                     <div class="field-group"><label>Job Title *</label><input type="text" name="job_title" required></div>
+                    <div class="field-group"><label>Programme</label><input type="text" name="programme" value="<?= esc($user['programme'] ?? '') ?>"></div>
+                    <div class="field-group">
+                        <label>Industry Sector</label>
+                        <select name="industry_sector">
+                            <option value="">Select Industry Sector</option>
+                            <?php foreach ($industrySectors as $sector): ?>
+                                <option value="<?= esc($sector) ?>"><?= esc($sector) ?> sector</option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                     <div class="field-group"><label>Start Date</label><input type="date" name="start_date"></div>
                     <div class="field-group"><label>End Date</label><input type="date" name="end_date"></div>
                 </div>
@@ -301,6 +387,16 @@
                                 <div class="grid-2">
                                     <div class="field-group"><label>Company *</label><input type="text" name="company_name" value="<?= esc($item['company_name'] ?? '') ?>" required></div>
                                     <div class="field-group"><label>Job Title *</label><input type="text" name="job_title" value="<?= esc($item['job_title'] ?? '') ?>" required></div>
+                                    <div class="field-group"><label>Programme</label><input type="text" name="programme" value="<?= esc($user['programme'] ?? '') ?>"></div>
+                                    <div class="field-group">
+                                        <label>Industry Sector</label>
+                                        <select name="industry_sector">
+                                            <option value="">Select Industry Sector</option>
+                                            <?php foreach ($industrySectors as $sector): ?>
+                                                <option value="<?= esc($sector) ?>" <?= ($item['industry_sector'] ?? '') === $sector ? 'selected' : '' ?>><?= esc($sector) ?> sector</option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
                                     <div class="field-group"><label>Start Date</label><input type="date" name="start_date" value="<?= esc($item['start_date'] ?? '') ?>"></div>
                                     <div class="field-group"><label>End Date</label><input type="date" name="end_date" value="<?= esc($item['end_date'] ?? '') ?>"></div>
                                 </div>

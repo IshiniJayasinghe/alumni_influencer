@@ -1,0 +1,65 @@
+CRITICAL - 2026-04-20 06:16:33 --> ErrorException: Access level to App\Controllers\DashboardController::requireLogin() must be protected (as in class App\Controllers\BaseController) or weaker
+[Method: GET, Route: dashboard]
+in APPPATH\Controllers\DashboardController.php on line 9.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-20 06:16:44 --> ErrorException: Access level to App\Controllers\DashboardController::requireLogin() must be protected (as in class App\Controllers\BaseController) or weaker
+[Method: GET, Route: dashboard/alumni]
+in APPPATH\Controllers\DashboardController.php on line 9.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-20 06:16:51 --> ErrorException: Access level to App\Controllers\DashboardController::requireLogin() must be protected (as in class App\Controllers\BaseController) or weaker
+[Method: GET, Route: dashboard/charts]
+in APPPATH\Controllers\DashboardController.php on line 9.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-20 06:23:02 --> ErrorException: Access level to App\Controllers\DashboardController::requireLogin() must be protected (as in class App\Controllers\BaseController) or weaker
+[Method: GET, Route: dashboard]
+in APPPATH\Controllers\DashboardController.php on line 9.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-20 06:27:49 --> ErrorException: Access level to App\Controllers\DashboardController::requireLogin() must be protected (as in class App\Controllers\BaseController) or weaker
+[Method: GET, Route: dashboard]
+in APPPATH\Controllers\DashboardController.php on line 9.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-04-20 06:28:03 --> ErrorException: Access level to App\Controllers\DashboardController::requireLogin() must be protected (as in class App\Controllers\BaseController) or weaker
+[Method: GET, Route: dashboard]
+in APPPATH\Controllers\DashboardController.php on line 9.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+DEBUG - 2026-04-20 06:39:33 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:39:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:39:47 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:39:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:39:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:41:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:41:56 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:11 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:40 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:44 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:50 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:52 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:53 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:42:59 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-04-20 06:43:14 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-04-20 07:02:36 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-04-20 07:02:36 --> You did not specify a SMTP hostname.
+ERROR - 2026-04-20 07:58:26 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-04-20 07:58:26 --> You did not specify a SMTP hostname.
+ERROR - 2026-04-20 07:58:50 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-04-20 07:58:50 --> You did not specify a SMTP hostname.
+ERROR - 2026-04-20 09:02:55 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-04-20 09:02:55 --> You did not specify a SMTP hostname.
+ERROR - 2026-04-20 10:03:54 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-04-20 10:03:54 --> You did not specify a SMTP hostname.
+ERROR - 2026-04-20 10:45:25 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-04-20 10:45:25 --> You did not specify a SMTP hostname.
+ERROR - 2026-04-20 10:50:18 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-04-20 10:50:18 --> You did not specify a SMTP hostname.
+ERROR - 2026-04-20 12:32:26 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-04-20 12:32:26 --> You did not specify a SMTP hostname.
+ERROR - 2026-04-20 12:50:23 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-04-20 12:50:23 --> You did not specify a SMTP hostname.
+ERROR - 2026-04-20 12:50:34 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2026-04-20 12:50:34 --> You did not specify a SMTP hostname.

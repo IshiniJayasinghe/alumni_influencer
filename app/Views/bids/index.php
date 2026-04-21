@@ -1,9 +1,10 @@
 <?= view('layout/header', ['title' => 'Bids']) ?>
 <div class="grid-2">
     <div class="card">
-        <h1>Blind bidding</h1>
+        <h1>Blind Bidding System</h1>
         <p style="margin-top:10px;">Status: <span class="tag"><?= esc($winningStatus) ?></span></p>
-        <p class="muted" style="margin-top:10px;">Monthly featured limit used: <?= (int) $winsThisMonth ?> / <?= (int) $allowedWinsThisMonth ?></p>
+        <p class="muted" style="margin-top:10px;">Monthly bidding limit used: <?= (int) $winsThisMonth ?> / <?= (int) $allowedWinsThisMonth ?></p>
+        <p class="muted" style="margin-top:10px;">Winner selection runs automatically every day at 6 PM.</p>
         <?php if (! empty($myBidToday)): ?><p style="margin-top:10px;">Your current bid for today: <strong>£<?= esc(number_format((float)$myBidToday['bid_amount'], 2)) ?></strong></p><?php endif; ?>
         <form method="post" action="<?= base_url('bids/add') ?>" style="margin-top:16px;">
             <?= csrf_field() ?>

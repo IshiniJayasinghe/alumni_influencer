@@ -7,9 +7,53 @@ use App\Models\ApiUsageLogModel;
 
 class DeveloperController extends BaseController
 {
-    // -------------------------------------------------------------------------
-    // Developer dashboard – manage API keys and view usage statistics
-    // -------------------------------------------------------------------------
+    private const AVAILABLE_SCOPES = [
+        'read:alumni' => 'Read alumni directory API data',
+        'read:analytics' => 'Read analytics API endpoints',
+        'read:alumni_of_day' => 'Read featured alumnus of the day endpoint',
+    ];
+
+    private function decodePermissions(?string $permissions): array
+    {
+        if (!$permissions) {
+            return [];
+        }
+
+        $decoded = json_decode($permissions, true);
+        return is_array($decoded) ? array_values(array_unique($decoded)) : [];
+    }
+
+    private function usageSummary(array $logs, array $keysById): array
+    {
+        $summary = [];
+
+        foreach ($logs as $log) {
+            $apiKeyId = (int) ($log['api_key_id'] ?? 0);
+            $endpoint = (string) ($log['endpoint'] ?? '');
+            $bucket = $apiKeyId . '|' . $endpoint;
+
+            if (!isset($summary[$bucket])) {
+                $summary[$bucket] = [
+                    'key_name' => $keysById[$apiKeyId]['key_name'] ?? 'Unknown key',
+                    'endpoint' => $endpoint,
+                    'total_requests' => 0,
+                    'last_used_at' => '',
+                ];
+            }
+
+            $summary[$bucket]['total_requests']++;
+            $usedAt = (string) ($log['used_at'] ?? '');
+            if ($usedAt > $summary[$bucket]['last_used_at']) {
+                $summary[$bucket]['last_used_at'] = $usedAt;
+            }
+        }
+
+        usort($summary, static function (array $left, array $right): int {
+            return strcmp($right['last_used_at'], $left['last_used_at']);
+        });
+
+        return array_slice($summary, 0, 20);
+    }
 
     public function index()
     {
@@ -17,15 +61,22 @@ class DeveloperController extends BaseController
             return $redirect;
         }
 
-        $userId      = (int) session()->get('user_id');
+        $userId = (int) session()->get('user_id');
         $apiKeyModel = new ApiKeyModel();
-        $logModel    = new ApiUsageLogModel();
+        $logModel = new ApiUsageLogModel();
 
-        $keys = $apiKeyModel->where('user_id', $userId)->orderBy('id', 'DESC')->findAll();
+        $keys = $apiKeyModel
+            ->where('user_id', $userId)
+            ->orderBy('id', 'DESC')
+            ->findAll();
 
-        // Fetch recent usage logs for all keys belonging to this user
+        foreach ($keys as &$key) {
+            $key['decoded_permissions'] = $this->decodePermissions($key['permissions'] ?? null);
+        }
+        unset($key);
+
         $keyIds = array_column($keys, 'id');
-        $logs   = [];
+        $logs = [];
         if (!empty($keyIds)) {
             $logs = $logModel
                 ->whereIn('api_key_id', $keyIds)
@@ -34,15 +85,24 @@ class DeveloperController extends BaseController
                 ->findAll();
         }
 
+        $keysById = [];
+        foreach ($keys as $key) {
+            $keysById[(int) $key['id']] = $key;
+        }
+
+        foreach ($logs as &$log) {
+            $apiKeyId = (int) ($log['api_key_id'] ?? 0);
+            $log['key_name'] = $keysById[$apiKeyId]['key_name'] ?? 'Unknown key';
+        }
+        unset($log);
+
         return view('dev/index', [
             'keys' => $keys,
             'logs' => $logs,
+            'usageSummary' => $this->usageSummary($logs, $keysById),
+            'availableScopes' => self::AVAILABLE_SCOPES,
         ]);
     }
-
-    // -------------------------------------------------------------------------
-    // Generate a new API key (cryptographically random, 64-char hex)
-    // -------------------------------------------------------------------------
 
     public function generateKey()
     {
@@ -50,38 +110,42 @@ class DeveloperController extends BaseController
             return $redirect;
         }
 
-        $userId  = (int) session()->get('user_id');
+        $userId = (int) session()->get('user_id');
         $keyName = trim((string) $this->request->getPost('key_name'));
+        $requestedPermissions = $this->request->getPost('permissions');
 
         if ($keyName === '') {
             return redirect()->back()->with('error', 'A key name is required.');
         }
 
-        $apiKeyModel = new ApiKeyModel();
+        if (!is_array($requestedPermissions)) {
+            $requestedPermissions = [];
+        }
 
-        // Prevent hoarding: cap active keys at 10 per user
+        $permissions = array_values(array_intersect(array_keys(self::AVAILABLE_SCOPES), $requestedPermissions));
+        if (empty($permissions)) {
+            return redirect()->back()->with('error', 'Select at least one API permission scope.');
+        }
+
+        $apiKeyModel = new ApiKeyModel();
         $activeCount = $apiKeyModel->where('user_id', $userId)->where('is_active', 1)->countAllResults();
         if ($activeCount >= 10) {
             return redirect()->back()->with('error', 'You have reached the maximum of 10 active API keys. Please revoke an existing key first.');
         }
 
-        $rawKey = bin2hex(random_bytes(32)); // 64-char hex, cryptographically random
+        $rawKey = bin2hex(random_bytes(32));
 
         $apiKeyModel->insert([
-            'user_id'    => $userId,
-            'key_name'   => $keyName,
-            'api_key'    => $rawKey,
-            'is_active'  => 1,
+            'user_id' => $userId,
+            'key_name' => $keyName,
+            'api_key' => $rawKey,
+            'permissions' => json_encode($permissions),
+            'is_active' => 1,
             'created_at' => date('Y-m-d H:i:s'),
         ]);
 
-        // Show raw key once in flash – it will NOT be shown again
         return redirect()->to(base_url('developer'))->with('generated_api_key', $rawKey);
     }
-
-    // -------------------------------------------------------------------------
-    // Revoke an existing API key (soft-delete via is_active = 0)
-    // -------------------------------------------------------------------------
 
     public function revoke($id)
     {
@@ -89,9 +153,9 @@ class DeveloperController extends BaseController
             return $redirect;
         }
 
-        $userId      = (int) session()->get('user_id');
+        $userId = (int) session()->get('user_id');
         $apiKeyModel = new ApiKeyModel();
-        $key         = $apiKeyModel->find((int) $id);
+        $key = $apiKeyModel->find((int) $id);
 
         if (!$key || (int) $key['user_id'] !== $userId) {
             return redirect()->to(base_url('developer'))->with('error', 'API key not found or access denied.');
@@ -102,19 +166,14 @@ class DeveloperController extends BaseController
         return redirect()->to(base_url('developer'))->with('success', 'API key "' . esc($key['key_name']) . '" has been revoked.');
     }
 
-    // -------------------------------------------------------------------------
-    // OpenAPI 3.0 specification (served at /openapi.json, consumed by Swagger UI)
-    // -------------------------------------------------------------------------
-
     public function openApiJson()
     {
         $spec = [
             'openapi' => '3.0.0',
-            'info'    => [
-                'title'       => 'Alumni Influencer API',
-                'version'     => '1.0.0',
-                'description' => 'Web API for the Alumni Influencer platform built by Phantasmagoria Ltd. '
-                               . 'All /api/* endpoints require a Bearer token obtained from the Developer portal.',
+            'info' => [
+                'title' => 'Alumni Influencer API',
+                'version' => '1.1.0',
+                'description' => 'API documentation for the Alumni Influencer coursework project. Analytics and featured alumnus endpoints require a Bearer token generated in the developer portal with the correct scopes.',
             ],
             'servers' => [
                 ['url' => base_url(), 'description' => 'Local development server'],
@@ -122,340 +181,248 @@ class DeveloperController extends BaseController
             'components' => [
                 'securitySchemes' => [
                     'BearerAuth' => [
-                        'type'        => 'http',
-                        'scheme'      => 'bearer',
-                        'description' => 'API key generated from the Developer portal (/developer)',
+                        'type' => 'http',
+                        'scheme' => 'bearer',
+                        'description' => 'Paste an API key generated from the developer portal.',
                     ],
                 ],
                 'schemas' => [
-                    'FeaturedAlumnus' => [
-                        'type'       => 'object',
+                    'ErrorResponse' => [
+                        'type' => 'object',
                         'properties' => [
-                            'name'          => ['type' => 'string', 'example' => 'Jane Smith'],
-                            'bio'           => ['type' => 'string', 'example' => 'Software engineer with 10 years experience.'],
-                            'linkedin_url'  => ['type' => 'string', 'format' => 'uri', 'example' => 'https://linkedin.com/in/janesmith'],
-                            'job_title_now' => ['type' => 'string', 'example' => 'Senior Software Engineer at Acme Corp'],
-                            'profile_image' => ['type' => 'string', 'example' => 'abc123.jpg'],
-                            'feature_date'  => ['type' => 'string', 'format' => 'date', 'example' => '2026-04-01'],
-                            'winning_bid'   => ['type' => 'number', 'format' => 'float', 'example' => 250.00],
+                            'status' => ['type' => 'string', 'example' => 'error'],
+                            'message' => ['type' => 'string', 'example' => 'Missing required scope: read:analytics'],
                         ],
                     ],
-                    'ErrorResponse' => [
-                        'type'       => 'object',
+                    'FeaturedAlumnus' => [
+                        'type' => 'object',
                         'properties' => [
-                            'status'  => ['type' => 'string', 'example' => 'error'],
-                            'message' => ['type' => 'string', 'example' => 'Invalid bearer token'],
+                            'name' => ['type' => 'string', 'example' => 'Jane Smith'],
+                            'bio' => ['type' => 'string', 'example' => 'Software engineer with 10 years experience.'],
+                            'linkedin_url' => ['type' => 'string', 'format' => 'uri', 'example' => 'https://linkedin.com/in/janesmith'],
+                            'job_title_now' => ['type' => 'string', 'example' => 'Senior Software Engineer'],
+                            'profile_image' => ['type' => 'string', 'example' => 'jane.jpg'],
+                            'feature_date' => ['type' => 'string', 'format' => 'date', 'example' => '2026-04-20'],
+                            'winning_bid' => ['type' => 'number', 'format' => 'float', 'example' => 250.00],
+                        ],
+                    ],
+                    'AlumniListItem' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'id' => ['type' => 'integer', 'example' => 16],
+                            'name' => ['type' => 'string', 'example' => 'Jane Smith'],
+                            'email' => ['type' => 'string', 'example' => 'jane@iit.ac.lk'],
+                            'linkedin_url' => ['type' => 'string', 'format' => 'uri', 'example' => 'https://linkedin.com/in/janesmith'],
+                            'job_title_now' => ['type' => 'string', 'example' => 'Senior Software Engineer'],
+                            'programme' => ['type' => 'string', 'example' => 'BSc Computer Science'],
+                            'industry_sector' => ['type' => 'string', 'example' => 'Information Technology (IT)'],
+                            'graduation_year' => ['type' => 'string', 'example' => '2026'],
+                            'degree_completion_date' => ['type' => 'string', 'example' => '2026-07-01'],
+                        ],
+                    ],
+                    'ApiKeyCreateRequest' => [
+                        'type' => 'object',
+                        'required' => ['key_name', 'permissions'],
+                        'properties' => [
+                            'key_name' => ['type' => 'string', 'example' => 'Analytics Dashboard Key'],
+                            'permissions' => [
+                                'type' => 'array',
+                                'items' => [
+                                    'type' => 'string',
+                                    'enum' => array_keys(self::AVAILABLE_SCOPES),
+                                ],
+                                'example' => ['read:analytics', 'read:alumni_of_day'],
+                            ],
+                        ],
+                    ],
+                    'AnalyticsEnvelope' => [
+                        'type' => 'object',
+                        'properties' => [
+                            'status' => ['type' => 'string', 'example' => 'success'],
+                            'filters' => [
+                                'type' => 'object',
+                                'properties' => [
+                                    'programme' => ['type' => 'string', 'example' => 'BSc Computer Science'],
+                                    'graduation_year' => ['type' => 'string', 'example' => '2026'],
+                                    'graduation_date' => ['type' => 'string', 'example' => '2026-07-01'],
+                                    'industry_sector' => ['type' => 'string', 'example' => 'Information Technology (IT)'],
+                                ],
+                            ],
+                            'data' => ['type' => 'array', 'items' => ['type' => 'object']],
                         ],
                     ],
                 ],
             ],
             'paths' => [
+                '/developer/generate-key' => [
+                    'post' => [
+                        'tags' => ['Developer'],
+                        'summary' => 'Generate a new API key with scopes',
+                        'requestBody' => [
+                            'required' => true,
+                            'content' => [
+                                'application/x-www-form-urlencoded' => [
+                                    'schema' => ['$ref' => '#/components/schemas/ApiKeyCreateRequest'],
+                                    'example' => [
+                                        'key_name' => 'Analytics Key',
+                                        'permissions' => ['read:alumni', 'read:analytics', 'read:alumni_of_day'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'responses' => [
+                            '302' => ['description' => 'Redirect back to developer dashboard with the raw key in flash data'],
+                        ],
+                    ],
+                ],
+                '/developer/revoke/{id}' => [
+                    'get' => [
+                        'tags' => ['Developer'],
+                        'summary' => 'Revoke an API key',
+                        'parameters' => [
+                            ['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']],
+                        ],
+                        'responses' => [
+                            '302' => ['description' => 'Redirect back to developer dashboard'],
+                        ],
+                    ],
+                ],
+                '/api/alumni' => [
+                    'get' => [
+                        'tags' => ['Public API'],
+                        'summary' => 'List and search alumni',
+                        'description' => 'Requires the read:alumni scope.',
+                        'security' => [['BearerAuth' => []]],
+                        'parameters' => [
+                            ['name' => 'search', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'string'], 'example' => 'Jane'],
+                            ['name' => 'programme', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'string'], 'example' => 'BSc Computer Science'],
+                            ['name' => 'industry_sector', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'string'], 'example' => 'Information Technology (IT)'],
+                            ['name' => 'graduation_year', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'string'], 'example' => '2026'],
+                        ],
+                        'responses' => [
+                            '200' => [
+                                'description' => 'Alumni list returned successfully',
+                                'content' => [
+                                    'application/json' => [
+                                        'example' => [
+                                            'status' => 'success',
+                                            'filters' => ['search' => 'Jane', 'programme' => '', 'industry_sector' => '', 'graduation_year' => '2026'],
+                                            'data' => [[
+                                                'id' => 16,
+                                                'name' => 'Jane Smith',
+                                                'email' => 'jane@iit.ac.lk',
+                                                'programme' => 'BSc Computer Science',
+                                                'industry_sector' => 'Information Technology (IT)',
+                                                'graduation_year' => '2026',
+                                                'degree_completion_date' => '2026-07-01',
+                                            ]],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            '401' => [
+                                'description' => 'Missing or invalid Bearer token',
+                                'content' => ['application/json' => ['schema' => ['$ref' => '#/components/schemas/ErrorResponse']]],
+                            ],
+                            '403' => [
+                                'description' => 'Missing read:alumni scope',
+                                'content' => ['application/json' => ['schema' => ['$ref' => '#/components/schemas/ErrorResponse']]],
+                            ],
+                        ],
+                    ],
+                ],
                 '/api/featured' => [
                     'get' => [
-                        'tags'        => ['Public API'],
-                        'summary'     => "Get today's featured alumnus",
-                        'description' => "Returns the full profile of the alumnus who won today's bidding slot. "
-                                       . 'Returns 404 if no winner has been selected yet for today.',
-                        'security'    => [['BearerAuth' => []]],
-                        'responses'   => [
+                        'tags' => ['Public API'],
+                        'summary' => "Get today's featured alumnus",
+                        'description' => 'Requires the read:alumni_of_day scope.',
+                        'security' => [['BearerAuth' => []]],
+                        'responses' => [
                             '200' => [
                                 'description' => 'Featured alumnus returned successfully',
-                                'content'     => [
+                                'content' => [
                                     'application/json' => [
-                                        'schema' => [
-                                            'type'       => 'object',
-                                            'properties' => [
-                                                'status' => ['type' => 'string', 'example' => 'success'],
-                                                'data'   => ['$ref' => '#/components/schemas/FeaturedAlumnus'],
+                                        'example' => [
+                                            'status' => 'success',
+                                            'data' => [
+                                                'name' => 'Jane Smith',
+                                                'feature_date' => '2026-04-20',
+                                                'winning_bid' => 250.00,
                                             ],
                                         ],
                                     ],
                                 ],
                             ],
                             '401' => [
-                                'description' => 'Unauthorized – missing or invalid Bearer token',
-                                'content'     => ['application/json' => ['schema' => ['$ref' => '#/components/schemas/ErrorResponse']]],
+                                'description' => 'Missing or invalid Bearer token',
+                                'content' => ['application/json' => ['schema' => ['$ref' => '#/components/schemas/ErrorResponse']]],
                             ],
-                            '404' => [
-                                'description' => 'No featured alumnus selected for today',
-                                'content'     => ['application/json' => ['schema' => ['$ref' => '#/components/schemas/ErrorResponse']]],
+                            '403' => [
+                                'description' => 'API key does not have the required scope',
+                                'content' => ['application/json' => ['schema' => ['$ref' => '#/components/schemas/ErrorResponse']]],
                             ],
                         ],
                     ],
                 ],
-
-                '/register' => [
-                    'post' => [
-                        'tags'        => ['Authentication'],
-                        'summary'     => 'Register a new alumni account',
-                        'description' => 'Creates a new account. Only @iit.ac.lk email addresses are accepted. '
-                                       . 'A verification email is sent before the account can be used.',
-                        'requestBody' => [
-                            'required' => true,
-                            'content'  => [
-                                'application/x-www-form-urlencoded' => [
-                                    'schema' => [
-                                        'type'       => 'object',
-                                        'required'   => ['name', 'email', 'role', 'password', 'confirm_password'],
-                                        'properties' => [
-                                            'name'             => ['type' => 'string', 'example' => 'Jane Smith'],
-                                            'email'            => ['type' => 'string', 'format' => 'email', 'example' => 'jane@iit.ac.lk'],
-                                            'role'             => ['type' => 'string', 'enum' => ['alumnus', 'developer']],
-                                            'password'         => ['type' => 'string', 'format' => 'password'],
-                                            'confirm_password' => ['type' => 'string', 'format' => 'password'],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
+                '/api/analytics/summary' => [
+                    'get' => [
+                        'tags' => ['Analytics'],
+                        'summary' => 'Get analytics summary counts',
+                        'description' => 'Requires the read:analytics scope.',
+                        'security' => [['BearerAuth' => []]],
+                        'parameters' => $this->analyticsQueryParameters(),
                         'responses' => [
-                            '302' => ['description' => 'Redirect to /login with success flash on success, or back with error flash on failure'],
-                        ],
-                    ],
-                ],
-
-                '/login' => [
-                    'post' => [
-                        'tags'        => ['Authentication'],
-                        'summary'     => 'Log in to an existing account',
-                        'description' => 'Authenticates the user and starts a session. Rate-limited to 5 attempts per 5 minutes.',
-                        'requestBody' => [
-                            'required' => true,
-                            'content'  => [
-                                'application/x-www-form-urlencoded' => [
-                                    'schema' => [
-                                        'type'       => 'object',
-                                        'required'   => ['email', 'password'],
-                                        'properties' => [
-                                            'email'    => ['type' => 'string', 'format' => 'email'],
-                                            'password' => ['type' => 'string', 'format' => 'password'],
+                            '200' => [
+                                'description' => 'Summary returned successfully',
+                                'content' => [
+                                    'application/json' => [
+                                        'example' => [
+                                            'status' => 'success',
+                                            'filters' => ['programme' => 'BSc Computer Science', 'graduation_year' => '2026', 'graduation_date' => '', 'industry_sector' => 'Information Technology (IT)'],
+                                            'data' => ['total_alumni' => 32, 'total_certifications' => 18, 'total_employment_records' => 24],
                                         ],
                                     ],
                                 ],
                             ],
-                        ],
-                        'responses' => [
-                            '302' => ['description' => 'Redirect to /profile on success, or back with error flash on failure'],
-                        ],
-                    ],
-                ],
-
-                '/logout' => [
-                    'get' => [
-                        'tags'      => ['Authentication'],
-                        'summary'   => 'Log out the current user',
-                        'responses' => ['302' => ['description' => 'Redirect to /login']],
-                    ],
-                ],
-
-                '/forgot-password' => [
-                    'post' => [
-                        'tags'        => ['Authentication'],
-                        'summary'     => 'Request a password reset email',
-                        'description' => 'Sends a password reset link to the registered email. Rate-limited to 3 attempts per 10 minutes. '
-                                       . 'Always returns success to prevent email enumeration.',
-                        'requestBody' => [
-                            'required' => true,
-                            'content'  => [
-                                'application/x-www-form-urlencoded' => [
-                                    'schema' => [
-                                        'type'       => 'object',
-                                        'required'   => ['email'],
-                                        'properties' => ['email' => ['type' => 'string', 'format' => 'email']],
-                                    ],
-                                ],
+                            '403' => [
+                                'description' => 'Missing read:analytics scope',
+                                'content' => ['application/json' => ['schema' => ['$ref' => '#/components/schemas/ErrorResponse']]],
                             ],
                         ],
-                        'responses' => ['302' => ['description' => 'Redirect to /login with generic success message']],
                     ],
                 ],
-
-                '/reset-password' => [
-                    'post' => [
-                        'tags'        => ['Authentication'],
-                        'summary'     => 'Reset password using a token from email',
-                        'description' => 'Validates a single-use, expiring reset token and updates the password.',
-                        'requestBody' => [
-                            'required' => true,
-                            'content'  => [
-                                'application/x-www-form-urlencoded' => [
-                                    'schema' => [
-                                        'type'       => 'object',
-                                        'required'   => ['token', 'password', 'password_confirm'],
-                                        'properties' => [
-                                            'token'            => ['type' => 'string'],
-                                            'password'         => ['type' => 'string', 'format' => 'password'],
-                                            'password_confirm' => ['type' => 'string', 'format' => 'password'],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'responses' => ['302' => ['description' => 'Redirect to /login on success']],
-                    ],
-                ],
-
-                '/profile' => [
-                    'get' => [
-                        'tags'      => ['Profile'],
-                        'summary'   => 'View your alumni profile',
-                        'responses' => ['200' => ['description' => 'Profile view page']],
-                    ],
-                ],
-
-                '/profile/manage' => [
-                    'get' => [
-                        'tags'      => ['Profile'],
-                        'summary'   => 'Manage all profile sections (add/edit/delete credentials, employment, image)',
-                        'responses' => ['200' => ['description' => 'Profile management page']],
-                    ],
-                ],
-
-                '/profile/update' => [
-                    'post' => [
-                        'tags'      => ['Profile'],
-                        'summary'   => 'Update basic profile details and/or profile photo',
-                        'responses' => ['302' => ['description' => 'Redirect after update']],
-                    ],
-                ],
-
-                '/profile/add-certification' => [
-                    'post' => [
-                        'tags'    => ['Profile'],
-                        'summary' => 'Add a professional certification',
-                        'requestBody' => [
-                            'required' => true,
-                            'content'  => [
-                                'application/x-www-form-urlencoded' => [
-                                    'schema' => [
-                                        'type'       => 'object',
-                                        'required'   => ['certification_name'],
-                                        'properties' => [
-                                            'certification_name' => ['type' => 'string'],
-                                            'organisation_name'  => ['type' => 'string'],
-                                            'course_url'         => ['type' => 'string', 'format' => 'uri'],
-                                            'completion_date'    => ['type' => 'string', 'format' => 'date'],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'responses' => ['302' => ['description' => 'Redirect after add']],
-                    ],
-                ],
-
-                '/profile/add-licence' => [
-                    'post' => [
-                        'tags'    => ['Profile'],
-                        'summary' => 'Add a professional licence',
-                        'responses' => ['302' => ['description' => 'Redirect after add']],
-                    ],
-                ],
-
-                '/profile/add-degree' => [
-                    'post' => [
-                        'tags'    => ['Profile'],
-                        'summary' => 'Add a degree',
-                        'responses' => ['302' => ['description' => 'Redirect after add']],
-                    ],
-                ],
-
-                '/profile/add-course' => [
-                    'post' => [
-                        'tags'    => ['Profile'],
-                        'summary' => 'Add a short professional course',
-                        'responses' => ['302' => ['description' => 'Redirect after add']],
-                    ],
-                ],
-
-                '/profile/add-employment' => [
-                    'post' => [
-                        'tags'    => ['Profile'],
-                        'summary' => 'Add an employment history entry',
-                        'responses' => ['302' => ['description' => 'Redirect after add']],
-                    ],
-                ],
-
-                '/bids' => [
-                    'get' => [
-                        'tags'        => ['Bidding'],
-                        'summary'     => 'View your bids, current win/lose status, and monthly usage',
-                        'description' => 'Shows blind bid status (winning/losing) without revealing the highest bid amount.',
-                        'responses'   => ['200' => ['description' => 'Bidding page']],
-                    ],
-                ],
-
-                '/bids/add' => [
-                    'post' => [
-                        'tags'        => ['Bidding'],
-                        'summary'     => 'Place a new bid or increase an existing bid (blind)',
-                        'description' => 'Bid amounts are blind – the highest competitor bid is never revealed. '
-                                       . 'Updates are increase-only. Monthly limit of 3 wins enforced (4 with event attendance).',
-                        'requestBody' => [
-                            'required' => true,
-                            'content'  => [
-                                'application/x-www-form-urlencoded' => [
-                                    'schema' => [
-                                        'type'       => 'object',
-                                        'required'   => ['bid_amount'],
-                                        'properties' => ['bid_amount' => ['type' => 'number', 'format' => 'float', 'minimum' => 0.01]],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'responses' => ['302' => ['description' => 'Redirect to /bids with success or error flash']],
-                    ],
-                ],
-
-                '/bids/delete/{id}' => [
-                    'get' => [
-                        'tags'        => ['Bidding'],
-                        'summary'     => 'Cancel a pending bid',
-                        'description' => 'Only pending bids (not yet decided) can be cancelled.',
-                        'parameters'  => [['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']]],
-                        'responses'   => ['302' => ['description' => 'Redirect after cancellation']],
-                    ],
-                ],
-
-                '/developer' => [
-                    'get' => [
-                        'tags'        => ['Developer'],
-                        'summary'     => 'Developer dashboard – manage API keys and view usage statistics',
-                        'description' => 'Shows all API keys, their status, and the last 50 API usage logs (endpoint, method, IP, timestamp).',
-                        'responses'   => ['200' => ['description' => 'Developer dashboard page']],
-                    ],
-                ],
-
-                '/developer/generate-key' => [
-                    'post' => [
-                        'tags'        => ['Developer'],
-                        'summary'     => 'Generate a new API key',
-                        'description' => 'Generates a cryptographically random 64-char bearer token. Maximum 10 active keys per user.',
-                        'requestBody' => [
-                            'required' => true,
-                            'content'  => [
-                                'application/x-www-form-urlencoded' => [
-                                    'schema' => [
-                                        'type'       => 'object',
-                                        'required'   => ['key_name'],
-                                        'properties' => ['key_name' => ['type' => 'string', 'example' => 'My AR Client Key']],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'responses' => ['302' => ['description' => 'Redirect to /developer – key shown once in flash message']],
-                    ],
-                ],
-
-                '/developer/revoke/{id}' => [
-                    'get' => [
-                        'tags'        => ['Developer'],
-                        'summary'     => 'Revoke an API key',
-                        'description' => 'Soft-deactivates the key (is_active = 0). Revoked keys are rejected by the API.',
-                        'parameters'  => [['name' => 'id', 'in' => 'path', 'required' => true, 'schema' => ['type' => 'integer']]],
-                        'responses'   => ['302' => ['description' => 'Redirect to /developer']],
-                    ],
-                ],
+                '/api/analytics/industries' => $this->analyticsPathDefinition('Get industry distribution', [
+                    ['industry_sector' => 'Information Technology (IT)', 'total' => 10],
+                    ['industry_sector' => 'Healthcare', 'total' => 4],
+                ]),
+                '/api/analytics/employers' => $this->analyticsPathDefinition('Get top employers', [
+                    ['company_name' => 'Tech Corp', 'total' => 6],
+                    ['company_name' => 'Build Lanka', 'total' => 3],
+                ]),
+                '/api/analytics/job-titles' => $this->analyticsPathDefinition('Get top job titles', [
+                    ['job_title' => 'Software Engineer', 'total' => 7],
+                    ['job_title' => 'Project Manager', 'total' => 3],
+                ]),
+                '/api/analytics/programmes' => $this->analyticsPathDefinition('Get programme distribution', [
+                    ['programme' => 'BSc Computer Science', 'total' => 15],
+                    ['programme' => 'MBA', 'total' => 5],
+                ]),
+                '/api/analytics/graduation-years' => $this->analyticsPathDefinition('Get graduation year distribution', [
+                    ['graduation_year' => '2024', 'total' => 8],
+                    ['graduation_year' => '2025', 'total' => 11],
+                ]),
+                '/api/analytics/certifications' => $this->analyticsPathDefinition('Get top certifications', [
+                    ['certification_name' => 'AWS Certified Cloud Practitioner', 'total' => 4],
+                    ['certification_name' => 'Google Data Analytics', 'total' => 3],
+                ]),
+                '/api/analytics/skills-gap' => $this->analyticsPathDefinition('Get skills-gap signals', [
+                    ['skill_name' => 'Cloud Computing', 'total' => 4],
+                    ['skill_name' => 'Data Analysis', 'total' => 3],
+                ]),
+                '/api/analytics/geographic-distribution' => $this->analyticsPathDefinition('Get geographic distribution', [
+                    ['location_name' => 'Sri Lanka', 'total' => 12],
+                    ['location_name' => 'United Kingdom', 'total' => 5],
+                ]),
             ],
         ];
 
@@ -464,25 +431,66 @@ class DeveloperController extends BaseController
             ->setBody(json_encode($spec, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 
-    // -------------------------------------------------------------------------
-    // Developer-facing alumni profile view
-    // -------------------------------------------------------------------------
+    private function analyticsQueryParameters(): array
+    {
+        return [
+            ['name' => 'programme', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'string'], 'example' => 'BSc Computer Science'],
+            ['name' => 'graduation_year', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'string'], 'example' => '2026'],
+            ['name' => 'graduation_date', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'string', 'format' => 'date'], 'example' => '2026-07-01'],
+            ['name' => 'industry_sector', 'in' => 'query', 'required' => false, 'schema' => ['type' => 'string'], 'example' => 'Information Technology (IT)'],
+        ];
+    }
+
+    private function analyticsPathDefinition(string $summary, array $exampleRows): array
+    {
+        return [
+            'get' => [
+                'tags' => ['Analytics'],
+                'summary' => $summary,
+                'description' => 'Requires the read:analytics scope.',
+                'security' => [['BearerAuth' => []]],
+                'parameters' => $this->analyticsQueryParameters(),
+                'responses' => [
+                    '200' => [
+                        'description' => 'Analytics data returned successfully',
+                        'content' => [
+                            'application/json' => [
+                                'example' => [
+                                    'status' => 'success',
+                                    'filters' => ['programme' => '', 'graduation_year' => '2026', 'graduation_date' => '', 'industry_sector' => ''],
+                                    'data' => $exampleRows,
+                                ],
+                            ],
+                        ],
+                    ],
+                    '401' => [
+                        'description' => 'Missing or invalid Bearer token',
+                        'content' => ['application/json' => ['schema' => ['$ref' => '#/components/schemas/ErrorResponse']]],
+                    ],
+                    '403' => [
+                        'description' => 'Missing read:analytics scope',
+                        'content' => ['application/json' => ['schema' => ['$ref' => '#/components/schemas/ErrorResponse']]],
+                    ],
+                ],
+            ],
+        ];
+    }
 
     public function profile($id = null)
     {
-        $db     = \Config\Database::connect();
+        $db = \Config\Database::connect();
         $userId = $id ?? session()->get('user_id');
 
         if (!$userId) {
             return redirect()->to('/login');
         }
 
-        $user           = $db->table('users')->where('id', $userId)->get()->getRowArray();
+        $user = $db->table('users')->where('id', $userId)->get()->getRowArray();
         $certifications = $db->table('certifications')->where('user_id', $userId)->get()->getResultArray();
-        $degrees        = $db->table('degrees')->where('user_id', $userId)->get()->getResultArray();
+        $degrees = $db->table('degrees')->where('user_id', $userId)->get()->getResultArray();
 
         return view('developer/profile', [
-            'user'           => $user,
+            'user' => $user,
             'certifications' => $certifications,
             'qualifications' => $degrees,
         ]);

@@ -14,6 +14,8 @@ class DegreeModel extends Model
         'degree_name',
         'institution_name',
         'official_url',
+        'start_date',
+        'end_date',
         'completion_date',
     ];
 }

@@ -13,6 +13,7 @@ class ApiKeyModel extends Model
         'user_id',
         'key_name',
         'api_key',
+        'permissions',
         'is_active',
         'last_used_at',
         'created_at',
